@@ -4,7 +4,7 @@ function pp_start() {
     var prey = 
     {
         name : 'Prey', 
-        size: 75, 
+        size: 164, 
         x: 400,
         birthRate: 0.16,
         deathRate: 1
@@ -13,7 +13,7 @@ function pp_start() {
     var predator = 
     {
         name:'Predator', 
-        size:50, 
+        size:112, 
         x:200,
         birthRate: 1,
         deathRate: 0.12
@@ -27,9 +27,17 @@ function pp_start() {
 
    function doUpdate() {
 
-     predator.size += (predator.size * predator.deathRate);
-     prey.size -= (prey.size * prey.birthRate);
-     
+    prey.deathRate = predator.size * 0.0008;
+    predator.birthRate = prey.size * 0.001;
+
+    var predatorDeaths = (predator.size * predator.deathRate);
+    var predatorBirths = (predator.size * predator.birthRate);
+    predator.size = predator.size + predatorBirths - predatorDeaths;
+
+    var preyDeaths = (prey.size * prey.deathRate);
+    var preyBirths = (prey.size * prey.birthRate);
+    prey.size = prey.size + preyBirths - preyDeaths;
+
      update(svg, stocks);
    };
   
