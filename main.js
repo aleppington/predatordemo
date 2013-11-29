@@ -4,7 +4,7 @@ function pp_start() {
 
     var view = initialiseView('#container');
 
-    iterate(100, 100, function () { return performEquations(model); }, view);
+    iterate(100, 100, function () { return step(model); }, view);
 
 };
 
@@ -15,7 +15,7 @@ function iterate(iterations, interval, calculator, view) {
     setTimeout(function () { iterate(iterations - 1, interval, calculator, view); }, interval);
 };
 
-function performEquations(model) {
+function step(model) {
  
     for (var i = model.controls.length - 1; i >= 0; i--) {
         model.controls[i].execute();
