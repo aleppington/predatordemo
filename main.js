@@ -10,10 +10,14 @@ function pp_start() {
     .attr('width', 600)
     .attr('height', 600);
 
-    var cells = svg.selectAll("circle")
+   update(svg, stocks);
+};
+
+function update(svg, stocks){
+     var circles = svg.selectAll("circle")
       .data(stocks);
 
-    var g = cells.enter().append('svg:g');
+    var g = circles.enter().append('svg:g');
     g.append("circle")
         .attr('cx',  function(d) { return d.x;})
         .attr('cy', 200)
@@ -24,4 +28,4 @@ function pp_start() {
         .attr('x', function (d) {return d.x - 25;})
         .attr('y', 200)
         .attr('stroke','white');
-};
+}
