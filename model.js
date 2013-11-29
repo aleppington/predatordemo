@@ -37,10 +37,7 @@ function createModel() {
         outflow: predatorOutflow
     };
 
-    var stocks = [predator, prey];
-
     var preyOutflowControl = {
-
         execute: function() { prey.outflow.rate = predator.size * 0.0008; }
     }
 
