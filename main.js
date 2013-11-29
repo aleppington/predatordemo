@@ -19,15 +19,9 @@ function pp_start() {
         .attr('cy', 200)
         .attr('r', function(d) { return d.size;});
 
-    svg.append('text')
-        .text(predator.name)
-        .attr('x', 175)
-        .attr('y', 200)
-        .attr('stroke','white');
-
-    svg.append('text')
-        .text(prey.name)
-        .attr('x', 385)
+    g.append('text')
+        .text(function (d) { return d.name;})
+        .attr('x', function (d) {return d.x - 25;});
         .attr('y', 200)
         .attr('stroke','white');
 };
