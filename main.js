@@ -1,77 +1,30 @@
 function pp_start() {
 
-    var preyInflow =
-    {
-        rate: 0.16
-    };
-
-    var preyOutflow =
-    {
-        rate: 1
-    };
-
-    var prey =
-    {
-        name: 'Prey',
-        size: 164,
-        x: 400,
-        inflow: preyInflow,
-        outflow: preyOutflow
-    };
-
-    var predatorInflow =
-    {
-        rate: 1
-    };
-
-    var predatorOutflow =
-    {
-        rate: 0.12
-    };
-
-    var predator =
-    {
-        name: 'Predator',
-        size: 112,
-        x: 200,
-        inflow: predatorInflow,
-        outflow: predatorOutflow
-    };
-
-    var stocks = [predator, prey];
+    var model = createModel();
 
     var view = initialiseView('#container');
 
-    var preyOutflowControl = {
-
-        execute: function() { prey.outflow.rate = predator.size * 0.0008; }
-    }
-
-    var predatorInflowControl = {
-        execute: function() { predator.inflow.rate = prey.size * 0.001; }       
-    }
-
-    iterate(100, 100, function () { return performEquations(stocks, [preyOutflowControl, predatorInflowControl]); }, view);
+    iterate(100, 100, function () { return performEquations(model); }, view);
 
 };
 
 function iterate(iterations, interval, calculator, view) {
     if (iterations <= 0) return;
-    var stocks = calculator();
-    updateView(view, stocks);
+    var model = calculator();
+    updateView(view, model);
     setTimeout(function () { iterate(iterations - 1, interval, calculator, view); }, interval);
 };
 
-function performEquations(stocks, controls) {
+function performEquations(model) {
  
-    for (var i = controls.length - 1; i >= 0; i--) {
-        controls[i].execute();
+    for (var i = model.controls.length - 1; i >= 0; i--) {
+        model.controls[i].execute();
     };
 
-    for (var i = stocks.length - 1; i >= 0; i--) {
-        adjustStock(stocks[i]);
+    for (var i = model.stocks.length - 1; i >= 0; i--) {
+        adjustStock(model.stocks[i]);
     };
-    return stocks;
+    return model;
 }
 
 
@@ -86,16 +39,15 @@ function initialiseView(divId) {
 function adjustStock(stock) {
     var reduction = stock.size * stock.outflow.rate;
     var increase = stock.size * stock.inflow.rate;
-    
 
     var newSize = stock.size + increase - reduction;
 
     stock.size = Math.max(newSize, 0);
 }
 
-function updateView(svg, stocks) {
+function updateView(svg, model) {
     var stockDisplays = svg.selectAll("g")
-      .data(stocks);
+      .data(model.stocks);
 
     var g = stockDisplays.enter().append('svg:g');
     g.append("rect")
