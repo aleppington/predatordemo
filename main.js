@@ -14,7 +14,8 @@ function pp_start() {
         .attr('r', 75);
 
     svg.append('text')
-    .text('This is some information about whatever')
-                        .attr('x', 50)
-                        .attr('y', 150);
+        .text('This is some information about whatever')
+        .attr('x', 50)
+        .attr('y', 150)
+        .attr('stroke','white');
 };
