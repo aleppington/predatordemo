@@ -23,23 +23,27 @@ function pp_start() {
 
     var svg = initialiseView('#container');
 
-   function doUpdate(iteration) {
+   function doUpdate(iteration, interval) {
 
-    if (iteration > 100) return;
+    if (iteration <= 0) return;
 
+        performEquations(predator, prey);
+
+        updateView(svg, stocks);
+        setTimeout(function() {doUpdate(iteration-1, interval);}, interval);
+   };
+  
+   doUpdate(100, 100);
+
+};
+
+function performEquations(predator, prey) {
     prey.deathRate = predator.size * 0.0008;
     predator.birthRate = prey.size * 0.001;
 
     predator.size = getAdjustedStock(predator.size, predator.birthRate, predator.deathRate);
     prey.size = getAdjustedStock(prey.size, prey.birthRate, prey.deathRate);
-
-     updateView(svg, stocks);
-     setTimeout(function() {doUpdate(iteration+1);}, 100);
-   };
-  
-   doUpdate(1);
-
-};
+}
 
 function initialiseView(divId) {
       var svg = d3.select(divId).append('svg:svg')
