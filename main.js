@@ -10,15 +10,18 @@ function pp_start() {
     .attr('width', 600)
     .attr('height', 600);
 
-   update(svg, stocks);
-
+   function doUpdate() {
+     update(svg, stocks);
+   };
+  
+   doUpdate();
 };
 
 function update(svg, stocks){
-     var circles = svg.selectAll("circle")
+     var circleGroups = svg.selectAll("circle")
       .data(stocks);
 
-    var g = circles.enter().append('svg:g');
+    var g = circleGroups.enter().append('svg:g');
     g.append("circle")
         .attr('cx',  function(d) { return d.x;})
         .attr('cy', 200);
@@ -29,6 +32,6 @@ function update(svg, stocks){
         .attr('y', 200)
         .attr('stroke','white');
 
-    circles.selectAll("circle")
+    circleGroups.selectAll("circle")
             .attr('r', function(d) { return d.size;});
 }
