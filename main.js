@@ -6,8 +6,8 @@ function pp_start() {
         name: 'Prey',
         size: 164,
         x: 400,
-        inflow: 0.16,
-        outflow: 1
+        inflowRate: 0.16,
+        outflowRate: 1
     };
 
     var predator =
@@ -15,8 +15,8 @@ function pp_start() {
         name: 'Predator',
         size: 112,
         x: 200,
-        inflow: 1,
-        outflow: 0.12
+        inflowRate: 1,
+        outflowRate: 0.12
     };
 
     var stocks = [predator, prey];
@@ -25,11 +25,11 @@ function pp_start() {
 
     var preyOutflowControl = {
 
-        execute: function() { prey.outflow = predator.size * 0.0008; }
+        execute: function() { prey.outflowRate = predator.size * 0.0008; }
     }
 
     var predatorInflowControl = {
-        execute: function() { predator.inflow = prey.size * 0.001; }       
+        execute: function() { predator.inflowRate = prey.size * 0.001; }       
     }
 
     iterate(100, 100, function () { return performEquations(stocks, [preyOutflowControl, predatorInflowControl]); }, view);
@@ -44,15 +44,14 @@ function iterate(iterations, interval, calculator, view) {
 };
 
 function performEquations(stocks, controls) {
-    var predator = stocks[0];
-    var prey = stocks[1];
  
     for (var i = controls.length - 1; i >= 0; i--) {
         controls[i].execute();
     };
 
-    adjustStock(prey, prey.inflow, prey.outflow);
-    adjustStock(predator, predator.inflow, predator.outflow);
+    for (var i = stocks.length - 1; i >= 0; i--) {
+        adjustStock(stocks[i]);
+    };
     return stocks;
 }
 
@@ -65,9 +64,9 @@ function initialiseView(divId) {
     return svg;
 }
 
-function adjustStock(stock, inflowRate, outflowRate) {
-    var reduction = stock.size * outflowRate;
-    var increase = stock.size * inflowRate;
+function adjustStock(stock) {
+    var reduction = stock.size * stock.outflowRate;
+    var increase = stock.size * stock.inflowRate;
     var newSize = stock.size + increase - reduction;
 
     stock.size = Math.max(newSize, 0);
