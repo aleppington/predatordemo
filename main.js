@@ -14,8 +14,14 @@ function pp_start() {
         .attr('r', 75);
 
     svg.append('text')
-        .text('This is some information about whatever')
-        .attr('x', 50)
-        .attr('y', 150)
+        .text('Predator')
+        .attr('x', 175)
+        .attr('y', 200)
+        .attr('stroke','white');
+
+        svg.append('text')
+        .text('Prey')
+        .attr('x', 385)
+        .attr('y', 200)
         .attr('stroke','white');
 };
