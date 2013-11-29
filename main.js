@@ -1,4 +1,7 @@
 function pp_start() {
+
+    var preySize = 75;
+    var predatorSize = 75;
   var svg = d3.select('#container').append('svg:svg')
     .attr('width', 600)
     .attr('height', 600);
@@ -6,12 +9,12 @@ function pp_start() {
     svg.append('svg:circle')
         .attr('cx', 200)
         .attr('cy',200)
-        .attr('r', 75);
+        .attr('r', predatorSize);
      
     svg.append('svg:circle')
         .attr('cx', 400)
         .attr('cy',200)
-        .attr('r', 75);
+        .attr('r', preySize);
 
     svg.append('text')
         .text('Predator')
@@ -19,7 +22,7 @@ function pp_start() {
         .attr('y', 200)
         .attr('stroke','white');
 
-        svg.append('text')
+    svg.append('text')
         .text('Prey')
         .attr('x', 385)
         .attr('y', 200)
