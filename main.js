@@ -11,6 +11,7 @@ function pp_start() {
     .attr('height', 600);
 
    update(svg, stocks);
+
 };
 
 function update(svg, stocks){
@@ -28,5 +29,6 @@ function update(svg, stocks){
         .attr('y', 200)
         .attr('stroke','white');
 
-    circles.attr('r', function(d) { return d.size;});
+    circles.selectAll("circle")
+            .attr('r', function(d) { return d.size;});
 }
