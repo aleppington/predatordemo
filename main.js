@@ -23,17 +23,17 @@ function pp_start() {
 
     var svg = initialiseView('#container');
 
-   function doUpdate(iteration, interval) {
+   function doUpdate(iteration, interval, calculator) {
 
     if (iteration <= 0) return;
 
-        performEquations(predator, prey);
+        calculator();
 
         updateView(svg, stocks);
-        setTimeout(function() {doUpdate(iteration-1, interval);}, interval);
+        setTimeout(function() {doUpdate(iteration-1, interval, calculator);}, interval);
    };
   
-   doUpdate(100, 100);
+   doUpdate(100, 100, function() {performEquations(predator, prey);});
 
 };
 
