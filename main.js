@@ -3,13 +3,18 @@ function pp_start() {
     .attr('width', 600)
     .attr('height', 600);
     
-  svg.append('svg:circle')
-     .attr('cx', 200)
-     .attr('cy',200)
-     .attr('r', 75);
+    svg.append('svg:circle')
+        .attr('cx', 200)
+        .attr('cy',200)
+        .attr('r', 75);
      
-     svg.append('svg:circle')
-     .attr('cx', 400)
-     .attr('cy',200)
-     .attr('r', 75);
+    svg.append('svg:circle')
+        .attr('cx', 400)
+        .attr('cy',200)
+        .attr('r', 75);
+
+    svg.append('text')
+    .text('This is some information about whatever')
+                        .attr('x', 50)
+                        .attr('y', 150);
 };
