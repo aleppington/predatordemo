@@ -11,16 +11,18 @@ function pp_start() {
     .attr('height', 600);
 
    function doUpdate() {
+     console.log('doUpdate called');
      stocks[0].size += 10;
      stocks[1].size -= 10;
      update(svg, stocks);
    };
   
    setInterval(doUpdate, 100);
+  //doUpdate();
 };
 
 function update(svg, stocks){
-     var circleGroups = svg.selectAll("circle")
+     var circleGroups = svg.selectAll("g")
       .data(stocks);
 
     var g = circleGroups.enter().append('svg:g');
@@ -34,6 +36,6 @@ function update(svg, stocks){
         .attr('y', 200)
         .attr('stroke','white');
 
-    circleGroups.selectAll("circle")
-            .attr('r', function(d) { return d.size;});
+    circleGroups.select("circle")
+            .attr('r', function(d)  { return d.size;});
 }
