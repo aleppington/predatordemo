@@ -25,23 +25,34 @@ function pp_start() {
     .attr('width', 600)
     .attr('height', 600);
 
-   function doUpdate() {
+   function doUpdate(iteration) {
 
     prey.deathRate = predator.size * 0.0008;
     predator.birthRate = prey.size * 0.001;
+    //console.log('prey.deathRate     = ' + prey.deathRate);
+   // console.log('predator.birthRate = ' + predator.birthRate);
 
     var predatorDeaths = (predator.size * predator.deathRate);
     var predatorBirths = (predator.size * predator.birthRate);
     predator.size = predator.size + predatorBirths - predatorDeaths;
+    if (predator.size < 0)  {
+        predator.size = 0;
+    }
 
     var preyDeaths = (prey.size * prey.deathRate);
     var preyBirths = (prey.size * prey.birthRate);
     prey.size = prey.size + preyBirths - preyDeaths;
+    if (prey.size < 0) {
+        prey.size = 0;
+    }
+
+    //console.log('[' + iteration + '] prey = ' + prey.size + ', predator = ' + predator.size);
 
      update(svg, stocks);
    };
   
    setInterval(doUpdate, 100);
+
 };
 
 function update(svg, stocks){
