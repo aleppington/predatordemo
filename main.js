@@ -11,12 +11,12 @@ function pp_start() {
     .attr('height', 600);
 
    function doUpdate() {
-     stocks[0].size += 1;
-     stocks[1].size -= 1;
+     stocks[0].size += 10;
+     stocks[1].size -= 10;
      update(svg, stocks);
    };
   
-   setInterval(function() { doUpdate(); }, 100);
+   setInterval(doUpdate, 100);
 };
 
 function update(svg, stocks){
