@@ -13,8 +13,8 @@ function pp_start() {
     var cells = svg.selectAll("circle")
       .data(stocks);
 
-    cells.enter()
-      .append("circle")
+    var g = cells.enter().append('svg:g');
+    g.append("circle")
         .attr('cx',  function(d) { return d.x;})
         .attr('cy', 200)
         .attr('r', function(d) { return d.size;});
