@@ -21,9 +21,7 @@ function pp_start() {
 
     var stocks = [predator, prey];
 
-  var svg = d3.select('#container').append('svg:svg')
-    .attr('width', 600)
-    .attr('height', 600);
+    var svg = initialiseView('#container');
 
    function doUpdate(iteration) {
 
@@ -35,13 +33,20 @@ function pp_start() {
     predator.size = getAdjustedStock(predator.size, predator.birthRate, predator.deathRate);
     prey.size = getAdjustedStock(prey.size, prey.birthRate, prey.deathRate);
 
-     update(svg, stocks);
+     updateView(svg, stocks);
      setTimeout(function() {doUpdate(iteration+1);}, 100);
    };
   
    doUpdate(1);
 
 };
+
+function initialiseView(divId) {
+      var svg = d3.select(divId).append('svg:svg')
+    .attr('width', 600)
+    .attr('height', 600);
+    return svg;
+}
 
 function getAdjustedStock(size, inflowRate, outflowRate){
     var reduction = size * outflowRate;
@@ -51,22 +56,25 @@ function getAdjustedStock(size, inflowRate, outflowRate){
     return Math.max(newSize,0);
 }
 
-function update(svg, stocks){
-     var circleGroups = svg.selectAll("g")
+function updateView(svg, stocks){
+     var stockDisplays = svg.selectAll("g")
       .data(stocks);
 
-    var g = circleGroups.enter().append('svg:g');
+    var g = stockDisplays.enter().append('svg:g');
     g.append("rect")
         .attr('x',  function(d) { return d.x;})
         .attr('y', 20)
         .attr('width',100);
 
     g.append('text')
-        .text(function (d) { return d.name;})
+       
         .attr('x', function (d) {return d.x - 25;})
         .attr('y', 20)
         .attr('stroke','white');
 
-    circleGroups.select("rect")
+    stockDisplays.select("rect")
             .attr('height', function(d)  { return d.size;});
+
+    stockDisplays.select("text")
+             .text(function (d) { return d.name + ' (' + Math.round(d.size * 100)/100 + ')';});
 }
