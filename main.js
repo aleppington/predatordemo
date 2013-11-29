@@ -56,16 +56,17 @@ function update(svg, stocks){
       .data(stocks);
 
     var g = circleGroups.enter().append('svg:g');
-    g.append("circle")
-        .attr('cx',  function(d) { return d.x;})
-        .attr('cy', 200);
+    g.append("rect")
+        .attr('x',  function(d) { return d.x;})
+        .attr('y', 20)
+        .attr('width',100);
 
     g.append('text')
         .text(function (d) { return d.name;})
         .attr('x', function (d) {return d.x - 25;})
-        .attr('y', 200)
+        .attr('y', 20)
         .attr('stroke','white');
 
-    circleGroups.select("circle")
-            .attr('r', function(d)  { return d.size;});
+    circleGroups.select("rect")
+            .attr('height', function(d)  { return d.size;});
 }
