@@ -20,12 +20,13 @@ function update(svg, stocks){
     var g = circles.enter().append('svg:g');
     g.append("circle")
         .attr('cx',  function(d) { return d.x;})
-        .attr('cy', 200)
-        .attr('r', function(d) { return d.size;});
+        .attr('cy', 200);
 
     g.append('text')
         .text(function (d) { return d.name;})
         .attr('x', function (d) {return d.x - 25;})
         .attr('y', 200)
         .attr('stroke','white');
+
+    circles.attr('r', function(d) { return d.size;});
 }
