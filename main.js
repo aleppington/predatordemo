@@ -27,33 +27,29 @@ function pp_start() {
 
    function doUpdate(iteration) {
 
+    if (iteration > 100) return;
+
     prey.deathRate = predator.size * 0.0008;
     predator.birthRate = prey.size * 0.001;
-    //console.log('prey.deathRate     = ' + prey.deathRate);
-   // console.log('predator.birthRate = ' + predator.birthRate);
 
-    var predatorDeaths = (predator.size * predator.deathRate);
-    var predatorBirths = (predator.size * predator.birthRate);
-    predator.size = predator.size + predatorBirths - predatorDeaths;
-    if (predator.size < 0)  {
-        predator.size = 0;
-    }
-
-    var preyDeaths = (prey.size * prey.deathRate);
-    var preyBirths = (prey.size * prey.birthRate);
-    prey.size = prey.size + preyBirths - preyDeaths;
-    if (prey.size < 0) {
-        prey.size = 0;
-    }
-
-    //console.log('[' + iteration + '] prey = ' + prey.size + ', predator = ' + predator.size);
+    predator.size = getAdjustedStock(predator.size, predator.birthRate, predator.deathRate);
+    prey.size = getAdjustedStock(prey.size, prey.birthRate, prey.deathRate);
 
      update(svg, stocks);
+     setTimeout(function() {doUpdate(iteration+1);}, 100);
    };
   
-   setInterval(doUpdate, 100);
+   doUpdate(1);
 
 };
+
+function getAdjustedStock(size, inflowRate, outflowRate){
+    var reduction = size * outflowRate;
+    var increase = size * inflowRate;
+    var newSize = size + increase - reduction;
+
+    return Math.max(newSize,0);
+}
 
 function update(svg, stocks){
      var circleGroups = svg.selectAll("g")
