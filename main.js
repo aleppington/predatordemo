@@ -38,13 +38,20 @@ function performEquations(stocks) {
     var predator = stocks[0];
     var prey = stocks[1];
  
-    prey.outflow = predator.size * 0.0008;
-    adjustStock(prey, prey.inflow, prey.outflow);
- 
-    predator.inflow = prey.size * 0.001;
-    adjustStock(predator, predator.inflow, predator.outflow);
+    prey.outflow = preyOutflowControl.execute(predator); 
+    predator.inflow = predatorOutflowControl.execute(prey);
 
+    adjustStock(prey, prey.inflow, prey.outflow);
+    adjustStock(predator, predator.inflow, predator.outflow);
     return stocks;
+}
+
+var preyOutflowControl = {
+    execute: function(predator) { return predator.size * 0.0008; }
+}
+
+var predatorOutflowControl = {
+    execute: function(prey) { return prey.size * 0.001; }    
 }
 
 function initialiseView(divId) {
