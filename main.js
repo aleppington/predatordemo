@@ -67,17 +67,16 @@ function updateView(svg, stocks){
     var g = stockDisplays.enter().append('svg:g');
     g.append("rect")
         .attr('x',  function(d) { return d.x;})
-        .attr('y', 20)
         .attr('width',100);
 
     g.append('text')
-       
-        .attr('x', function (d) {return d.x - 25;})
-        .attr('y', 20)
+        .attr('x', function (d) {return d.x;})
+        .attr('y', 580)
         .attr('stroke','white');
 
     stockDisplays.select("rect")
-            .attr('height', function(d)  { return d.size;});
+            .attr('height', function(d)  { return d.size;})
+            .attr('y', function(d) {return 560 - d.size;});
 
     stockDisplays.select("text")
              .text(function (d) { return d.name + ' (' + Math.round(d.size * 100)/100 + ')';});
