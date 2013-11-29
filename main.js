@@ -21,7 +21,7 @@ function pp_start() {
 
     g.append('text')
         .text(function (d) { return d.name;})
-        .attr('x', function (d) {return d.x - 25;});
+        .attr('x', function (d) {return d.x - 25;})
         .attr('y', 200)
         .attr('stroke','white');
 };
