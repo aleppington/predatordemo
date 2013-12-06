@@ -1,22 +1,44 @@
-function pp_start() {
+function start() {
 
+    var timeSpan = 500;
+
+    var view = new View("#container");
     var model = createModel();
+    var data = runModel(timeSpan, function () { return step(model); });
 
-    var view = initialiseView('#container');
-
-    iterate(100, 100, function () { return step(model); }, view);
+    view.update(data);
 
 };
 
-function iterate(iterations, interval, calculator, view) {
-    if (iterations <= 0) return;
-    var model = calculator();
-    updateView(view, model);
-    setTimeout(function () { iterate(iterations - 1, interval, calculator, view); }, interval);
-};
+function runModel(timeLength, calculator){
+
+    var data = new Array();
+
+    for (var j=0; j< timeLength; j++)
+    {
+        var model = calculator();
+        var timeSlotData = {
+            time: j,
+            stocks : new Array()
+        };
+        for (var i = 0; i < model.stocks.length; i++)
+        {
+            var currentStock = model.stocks[i];
+            timeSlotData.stocks.push(
+                {
+                    name: currentStock.name,
+                    value: currentStock.size,
+                    x: currentStock.x
+                });
+        }
+        data.push(timeSlotData);
+    }
+    return data;
+}
+
 
 function step(model) {
- 
+
     for (var i = model.controls.length - 1; i >= 0; i--) {
         model.controls[i].execute();
     };
@@ -27,42 +49,9 @@ function step(model) {
     return model;
 }
 
-
-
-function initialiseView(divId) {
-    var svg = d3.select(divId).append('svg:svg')
-    .attr('width', 600)
-    .attr('height', 600);
-    return svg;
-}
-
 function adjustStock(stock) {
     var reduction = stock.size * stock.outflow.rate;
     var increase = stock.size * stock.inflow.rate;
-
     var newSize = stock.size + increase - reduction;
-
     stock.size = Math.max(newSize, 0);
-}
-
-function updateView(svg, model) {
-    var stockDisplays = svg.selectAll("g")
-      .data(model.stocks);
-
-    var g = stockDisplays.enter().append('svg:g');
-    g.append("rect")
-        .attr('x', function (d) { return d.x; })
-        .attr('width', 100);
-
-    g.append('text')
-        .attr('x', function (d) { return d.x; })
-        .attr('y', 580)
-        .attr('stroke', 'white');
-
-    stockDisplays.select("rect")
-            .attr('height', function (d) { return d.size; })
-            .attr('y', function (d) { return 560 - d.size; });
-
-    stockDisplays.select("text")
-             .text(function (d) { return d.name + ' (' + Math.round(d.size * 100) / 100 + ')'; });
 }

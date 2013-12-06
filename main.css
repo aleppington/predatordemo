@@ -1,0 +1,22 @@
+body
+{
+	font-family: arial;
+}
+
+#dataView
+{
+    background-color: aliceblue;
+    display: block;
+}
+
+#timeView
+{
+    background-color: #eeeeee;
+}
+
+circle
+{
+    background-color: white;
+}
+
+
