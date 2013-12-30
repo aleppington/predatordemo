@@ -5,18 +5,23 @@ body
 
 #dataView
 {
-    background-color: aliceblue;
-    display: block;
+	background-color: aliceblue;
+	display: block;
 }
 
 #timeView
 {
-    background-color: #eeeeee;
+	background-color: #eeeeee;
 }
 
 circle
 {
-    background-color: white;
+	background-color: white;
+}
+
+input
+{
+	display: block;
 }
 
 
