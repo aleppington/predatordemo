@@ -2,11 +2,11 @@ var View = function(parentElementId)
 {
     var parent = d3.select(parentElementId);
     var _dataView = new DataView(parent, 'dataView', 600, 600);
-    var _timeView = new TimeView(parent,'timeView', 600, 50);
+    var _timeView = new TimeView(parent,'timeView', 600, 40, 25);
 
     this.update = function(modelData)
     {
-        _timeView.initialise(0, modelData.length, 0, 580, 0, 20);
+        _timeView.initialise(0, modelData.length);
         iterate(100, modelData, 0);
     };
 
@@ -52,37 +52,54 @@ var DataView = function(parent,controlId, width, height)
 };
 
 
-var TimeView = function(parent,controlId, width, height)
+var TimeView = function(parent,controlId, width, height, padding)
 {
+    var _width = width;
+    var _height = height;
+    var _padding = padding;
+    
     var _view = parent.append('div')
-        .attr('id', controlId);
+        .attr('id', controlId)
+        .attr('style', 'height:' + _height + 'px;' + 'width:' + (_width - (_padding * 2)) + 'px;' + 'padding:' + _padding + 'px;');
+  
+    var _timeLineContainer = _view.append('div')
+        .attr('id', controlId + "_timelinecontainer")
+        .attr('style', 'margin-left:20px;');
         
-    var _timeLine = _view.append('svg:svg')
+    var _timeLine = _timeLineContainer.append('svg:svg')
         .attr('id', controlId + "_timeline")
-        .attr('width', width)
-        .attr('height', height);
+        .attr('height', 25)
+
+    var _sliderContainer =  _view.append('div')
+        .attr('id', controlId + "_slidercontainer")
+        .attr('style', 'width:' + (_width - 120) + 'px;' + 'margin-left:20px;');
         
-    var _slider =  _view.append('input')
-            .attr('id', controlId + "_slider")
-            .attr('type', 'range')
+    var _sliderInput = _sliderContainer.append('input')
+        .attr('id', controlId + "_sliderinput")
+        .attr('type', 'range')
+        .attr('style', 'width:' + (_width - 120)  + 'px;');
             
         
-    this.initialise = function(min, max, rangeMin, rangeMax, xPos, yPos)
+    this.initialise = function(min, max)
     {
+        var rangeMin = 0;
+        var rangeMax = (_width - 120);
+        
         var x = d3.scale.linear().domain([min, max]).range([rangeMin, rangeMax]);
         
-        _slider.attr('min', min.toString())
+        _sliderInput.attr('min', min.toString())
             .attr('max', max.toString())
-            .attr('style', 'width:' +  + 'px');
             
         var axis = d3.svg.axis()
             .scale(x);
             
         var axisElement = _timeLine.append('g')
+            .attr('id', controlId + "_timelineaxis")
             .data(d3.range(rangeMin, rangeMax))
             .call(axis);
             
-        return axisElement;
+        axisElement.selectAll('text')
+            .attr('style', 'text-anchor: start;');
     };
     
     
