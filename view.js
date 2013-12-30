@@ -100,6 +100,16 @@ var TimeView = function(parent,controlId, width, height, padding)
             
         axisElement.selectAll('text')
             .attr('style', 'text-anchor: start;');
+            
+        axisElement.selectAll('path')
+        .attr({fill:'none',
+              stroke:'black',
+              'stroke-width': 0.5});
+            
+        axisElement.selectAll('line')
+            .attr({fill:'none',
+                  stroke:'black',
+                  'stroke-width': 0.3});
     };
     
     
