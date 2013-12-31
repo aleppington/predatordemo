@@ -57,11 +57,10 @@ var DataView = function(parent,controlId, width, height)
     };
 };
 
-var TimeDisplay = function(parent,controlId, width, height, padding)
+var TimeDisplay = function(parent,controlId)
 {
     var _view = parent.append('div')
         .attr('id', controlId)
-        .attr('style', 'height:' + (height - (padding * 2)) + 'px;' + 'width:' + (width - (padding * 2)) + 'px;' + 'padding:' + padding + 'px;');
     
     this.timeChange = function(timeSpan)
     {
@@ -109,6 +108,7 @@ var TimeLine = function(parent,controlId, width, height, padding)
     };
     
     _sliderInput.on('mouseup', raiseChangedEvents);
+    _sliderInput.on('keyup', raiseChangedEvents);
       
     this.addTimeChangedListener = function(timeChangedListener)
     {

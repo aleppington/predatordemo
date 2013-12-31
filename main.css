@@ -32,6 +32,9 @@ input
 	background-color: red;
 	font-family: fantasy;
 	font-size: 2em;
+	width: 60px;
+	height: 60px;
+	padding: 10px;
 	
 }
 
