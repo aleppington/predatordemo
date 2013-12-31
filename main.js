@@ -1,4 +1,4 @@
-var App = function()
+var ModelRunner = function()
 {
     var _currentTime;
     var _timeSpanMax = 500;

@@ -9,7 +9,7 @@ body
 	display: block;
 }
 
-#timeView
+#timeLine
 {
 	background-color: #eeeeee;
 }
@@ -22,6 +22,17 @@ circle
 input
 {
 	display: block;
+}
+
+#timeDisplay
+{
+	position: absolute;
+	top: 500px;
+	left: 20px;
+	background-color: red;
+	font-family: fantasy;
+	font-size: 2em;
+	
 }
 
 

@@ -2,12 +2,18 @@ var View = function(parentElementId)
 {
     var parent = d3.select(parentElementId);
     var _dataView = new DataView(parent, 'dataView', 600, 600);
-    var _timeChangedListeners = new Array();
-    var _timeView = new TimeView(parent, _timeChangedListeners, 'timeView', 600, 40, 25, 0);
+    
+    var _timeLine = new TimeLine(parent, 'timeLine', 600, 60, 25, 0);
+    var _timeDisplay = new TimeDisplay(parent, 'timeDisplay', 75, 75, 10);
+    
+    this.addTimeChangedListener = function(timeChangedListener)
+    {
+        _timeLine.addTimeChangedListener(timeChangedListener);
+    };
     
     this.initialise = function(min, max)
     {
-        _timeView.initialise(min, max);
+        _timeLine.initialise(min, max);
     };
     
     this.update = function(data)
@@ -15,13 +21,8 @@ var View = function(parentElementId)
         _dataView.update(data);
     };
     
-    this.addTimeChangedListener = function(timeChangedListener)
-    {
-        _timeChangedListeners.push(timeChangedListener);
-    };
-    
-    
- 
+
+    _timeLine.addTimeChangedListener(_timeDisplay.timeChange);
 };
 
 var DataView = function(parent,controlId, width, height)
@@ -56,8 +57,20 @@ var DataView = function(parent,controlId, width, height)
     };
 };
 
+var TimeDisplay = function(parent,controlId, width, height, padding)
+{
+    var _view = parent.append('div')
+        .attr('id', controlId)
+        .attr('style', 'height:' + (height - (padding * 2)) + 'px;' + 'width:' + (width - (padding * 2)) + 'px;' + 'padding:' + padding + 'px;');
+    
+    this.timeChange = function(timeSpan)
+    {
+        _view.text(timeSpan.toString());
+    }
+}
 
-var TimeView = function(parent, timeChangedListeners,controlId, width, height, padding)
+
+var TimeLine = function(parent,controlId, width, height, padding)
 {
     var _min = 0;
     var _max = 0;
@@ -65,7 +78,7 @@ var TimeView = function(parent, timeChangedListeners,controlId, width, height, p
     var _width = width;
     var _height = height;
     var _padding = padding;
-    var _onChangeListeners = timeChangedListeners;
+    var _timeChangedListeners = new Array();
     
     var _view = parent.append('div')
         .attr('id', controlId)
@@ -88,13 +101,19 @@ var TimeView = function(parent, timeChangedListeners,controlId, width, height, p
         .attr('type', 'range')
         .attr('style', 'width:' + (_width - 120)  + 'px;');
          
-    _sliderInput.on('mouseup', function() {
-        for (var i=0;i < _onChangeListeners.length; i++)
+    var raiseChangedEvents = function() {
+        for (var i=0;i < _timeChangedListeners.length; i++)
         {
-            _onChangeListeners[i](parseInt(_sliderInput.property('value')));
+            _timeChangedListeners[i](parseInt(_sliderInput.property('value')));
         }
-    });
-            
+    };
+    
+    _sliderInput.on('mouseup', raiseChangedEvents);
+      
+    this.addTimeChangedListener = function(timeChangedListener)
+    {
+        _timeChangedListeners.push(timeChangedListener);
+    };
     
     this.initialise = function(min, max)
     {
@@ -131,8 +150,7 @@ var TimeView = function(parent, timeChangedListeners,controlId, width, height, p
                   stroke:'black',
                   'stroke-width': 0.3});
     };
-    
-    
+      
     
 };
 
