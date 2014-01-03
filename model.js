@@ -1,31 +1,21 @@
 function createModel() {
-	var preyInflow =
-    {
-        rate: 0.16
-    };
-
-    var preyOutflow =
-    {
-        rate: 1
-    };
-
+	
     var prey =
     {
         name: 'Prey',
         size: 164,
         x: 400,
-        inflow: preyInflow,
-        outflow: preyOutflow
-    };
+        inflow:
+	{
+		name: 'Births',
+		rate: 0.16
+	},
+        outflow:
+	{
+		name: 'Deaths',
+		rate: 1
+	}
 
-    var predatorInflow =
-    {
-        rate: 1
-    };
-
-    var predatorOutflow =
-    {
-        rate: 0.12
     };
 
     var predator =
@@ -33,8 +23,16 @@ function createModel() {
         name: 'Predator',
         size: 112,
         x: 200,
-        inflow: predatorInflow,
-        outflow: predatorOutflow
+        inflow:
+	{
+		name: 'Births',
+		rate: 1
+	},
+        outflow:
+	{
+		name: 'Deaths',
+		rate: 0.12
+	}
     };
 
     var preyOutflowControl = {

@@ -12,7 +12,11 @@
    
  </body>
  <script>
-  var modelRunner = new ModelRunner();
-  modelRunner.start();
+  
+  var view = new View("#container");
+  var model= createModel();
+  var presenter = new Presenter(500, view, model);
+  presenter.start();
+  
  </script>
 </html>

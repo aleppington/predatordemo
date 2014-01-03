@@ -1,30 +1,28 @@
-var ModelRunner = function()
+var Presenter = function(timeSpan, view, model)
 {
-    var _currentTime;
-    var _timeSpanMax = 500;
-    var _view = new View("#container");
-    var _model= createModel();
+    var _timeSpanMax = timeSpan;
+    var _view = view;
+    var _model = model;
     var _data;
     
     this.start = function() {
         _data = runModel(_timeSpanMax, function () { return step(_model); });
-        _currentTime = 0;
-        _view.initialise(_currentTime, _timeSpanMax);
+        _view.initialise(0, _timeSpanMax);
         _view.addTimeChangedListener(update);
     };
     
-    var update = function(timeSpan) {
-        _view.update(_data[timeSpan]);
+    var update = function(time) {
+        _view.update(_data[time]);
     };
     
     var runModel = function(timeLength, calculator){
-        var data = new Array();
+        var data = [];
         for (var j=0; j< timeLength; j++)
         {
             var model = calculator();
             var timeSlotData = {
                 time: j,
-                stocks : new Array()
+                stocks : []
             };
             for (var i = 0; i < model.stocks.length; i++)
             {
@@ -33,7 +31,22 @@ var ModelRunner = function()
                     {
                         name: currentStock.name,
                         value: currentStock.size,
-                        x: currentStock.x
+                        x: currentStock.x,
+                        inflow:
+                        {
+                            name: currentStock.inflow.name,
+                            flow: calculateFlow(currentStock, currentStock.inflow)
+                        },
+                        outflow: 
+                        {
+                            name: currentStock.outflow.name,
+                            flow: calculateFlow(currentStock, currentStock.outflow)
+                        },
+                        totalflow:
+                        {
+                            name: "Total Flow",
+                            flow: calculateTotalFlow(currentStock)
+                        }
                     });
             }
             data.push(timeSlotData);
@@ -52,28 +65,26 @@ var ModelRunner = function()
         return model;
     };
     
-    var adjustStock = function(stock) {
-        var reduction = stock.size * stock.outflow.rate;
-        var increase = stock.size * stock.inflow.rate;
-        var newSize = stock.size + increase - reduction;
+    
+    var adjustStock = function(stock)
+    {
+        var newSize = stock.size + calculateTotalFlow(stock);  
         stock.size = Math.max(newSize, 0);
+    };
+    
+    var calculateTotalFlow = function(stock) {
+        var reduction = calculateFlow(stock, stock.outflow);
+        var increase = calculateFlow(stock, stock.inflow);
+        return increase - reduction;
+            
+    };
+    
+    var calculateFlow = function(stock, flow)
+    {
+        return stock.size * flow.rate;
     };
 };
 
-
-
-//function onTimeChange()
-//{
-//    view.update(data[dataIndex]);
-//}
-
-//function iterate(interval, data, view, dataIndex) {
-//        if (dataIndex >= data.length) return;
-//        view.update(data[dataIndex]);
-//        _timeView.update(dataIndex);
-//        dataIndex++;
-//        setTimeout(function () { iterate(interval, data, view, dataIndex); }, interval);
-//    };
 
 
 

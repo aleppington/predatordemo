@@ -3,17 +3,6 @@ body
 	font-family: arial;
 }
 
-#dataView
-{
-	background-color: aliceblue;
-	display: block;
-}
-
-#timeLine
-{
-	background-color: #eeeeee;
-}
-
 circle
 {
 	background-color: white;
@@ -24,7 +13,44 @@ input
 	display: block;
 }
 
-#timeDisplay
+#dataview
+{
+	background-color: aliceblue;
+	display: block;
+	width: 600px;
+	height: 600px;
+}
+
+#timeline
+{
+	background-color: #eeeeee;
+	width: 550px;
+	height: 60px;
+	padding: 25px;
+}
+
+#timeline_timeline
+{
+	height: 25px;
+}
+
+#timeline_timelinecontainer
+{
+	margin-left:20px;
+}
+
+#timeline_slidercontainer
+{
+        margin-left:20px;
+	width: 480px;
+}
+
+#timeline_sliderinput
+{
+	width: 480px;
+}
+
+#timedisplay
 {
 	position: absolute;
 	top: 500px;
@@ -37,6 +63,20 @@ input
 	padding: 10px;
 	
 }
+
+
+
+#flowtotaldisplay
+{
+	font-size: 1.1em;
+}
+
+#flowdisplay
+{
+	font-size: 0.9em;
+}
+
+
 
 
 
