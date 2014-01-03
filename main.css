@@ -55,15 +55,15 @@ input
 	position: absolute;
 	top: 500px;
 	left: 20px;
-	background-color: red;
+	background-color: #eeeeee;
 	font-family: fantasy;
 	font-size: 2em;
 	width: 60px;
 	height: 60px;
 	padding: 10px;
+	border: solid 1px red;
 	
 }
-
 
 
 #flowtotaldisplay
