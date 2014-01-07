@@ -4,6 +4,7 @@
    <script src="model.js"></script>
    <script src="main.js"></script>
    <script src="view.js"></script>
+   <script src="settings.js"></script>
    <link rel="stylesheet" type="text/css" href="main.css"/>
  </head>
  <body>
@@ -12,10 +13,11 @@
    
  </body>
  <script>
-  
-  var view = new View("#container");
+
+  var settings = createSettings();
+  var view = new View("#container", settings);
   var model= createModel();
-  var presenter = new Presenter(300, view, model);
+  var presenter = new Presenter(view, model, settings);
   presenter.start();
   
  </script>

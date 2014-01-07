@@ -1,19 +1,23 @@
-var Presenter = function(timeSpan, view, model)
+var Presenter = function(view, model, settings)
 {
-    var _timeSpanMax = timeSpan;
     var _view = view;
     var _model = model;
+    var _settings = settings;
     var _data;
     
     this.start = function() {
-        _data = runModel(_timeSpanMax, function () { return step(_model); });
-        _view.initialise(0, _timeSpanMax);
+        _data = runModel(_settings.timeSpan, function () { return step(_model); });
         _view.addTimeChangedListener(update);
     };
     
     var update = function(time) {
         _view.update(_data[time]);
     };
+    
+    //var setMaxRanges(data, settings)
+    //{
+    //    
+    //};
     
     var runModel = function(timeLength, calculator){
         var data = [];
@@ -29,23 +33,23 @@ var Presenter = function(timeSpan, view, model)
                 var currentStock = model.stocks[i];
                 timeSlotData.stocks.push(
                     {
+                        ref: currentStock.ref,
                         name: currentStock.name,
                         value: currentStock.size,
-                        x: currentStock.x,
                         inflow:
                         {
                             name: currentStock.inflow.name,
-                            flow: calculateFlow(currentStock, currentStock.inflow)
+                            value: calculateFlow(currentStock, currentStock.inflow)
                         },
                         outflow: 
                         {
                             name: currentStock.outflow.name,
-                            flow: calculateFlow(currentStock, currentStock.outflow)
+                            value: calculateFlow(currentStock, currentStock.outflow)
                         },
                         totalflow:
                         {
                             name: "Total Flow",
-                            flow: calculateTotalFlow(currentStock)
+                            value: calculateTotalFlow(currentStock)
                         }
                     });
             }

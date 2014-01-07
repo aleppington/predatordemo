@@ -1,35 +1,67 @@
-var View = function(parentElementId)
+var View = function(parentElementId, settings)
 {
     var parent = d3.select(parentElementId);
-    var _dataView = new DataView(parent, 'dataview');  
+    
+    var getStockSetting = function(s)
+    {
+        return function(stockRef)
+        {
+            for (var i=0; i<s.stocks.length; i++)
+            {
+                var stockSettings = s.stocks[i];
+                
+                if (stockSettings.ref == stockRef)
+                {
+                  return stockSettings; 
+                }
+            }
+            return null;
+        };
+    };
+    
+    var _dataView = new BarChartDataView(parent, 'dataview', getStockSetting(settings));  
     var _timeLine = new TimeLine(parent, 'timeline');
     var _timeDisplay = new TimeDisplay(parent, 'timedisplay');
+    
+    _timeLine.initialise(settings.timeSpan);
+    
+    
     
     this.addTimeChangedListener = function(timeChangedListener)
     {
         _timeLine.addTimeChangedListener(timeChangedListener);
     };
     
-    this.initialise = function(min, max)
-    {
-        _timeLine.initialise(min, max);
-    };
-    
     this.update = function(data)
     {
         _dataView.update(data);
     };
-    
 
     _timeLine.addTimeChangedListener(_timeDisplay.timeChange);
 };
 
-var DataView = function(parent,controlId, width, height)
+var CircleDataView = function(parent,controlId, width, height, max)
 {
     var _view = parent.append('svg:svg')
         .attr('id', controlId)
         .attr('width', width)
         .attr('height', height);
+        
+    var _stocksView = _view.append('g');
+}
+
+var BarChartDataView = function(parent,controlId, settings)
+{
+    //var _getSettings = function(s) {
+    //    return function (d){
+    //        return s(d.ref);
+    //    };
+    //}(settings);
+    
+    var _getSettings = settings;
+    
+    var _view = parent.append('svg:svg')
+        .attr('id', controlId);
         
     var _stocksView = _view.append("g");
     var _flowsView = _view.append("g");
@@ -41,17 +73,17 @@ var DataView = function(parent,controlId, width, height)
         
         var stockSelection = stockDisplays.enter().append('svg:g');
         stockSelection.append("rect")
-            .attr('x', function (d) { return d.x; })
-            .attr('width', 100);
+            .attr('x', function (d) { return _getSettings(d.ref).x; })
+            .attr('width', function (d) { return _getSettings(d.ref).width; });
         
         stockSelection.append('text')
-            .attr('x', function (d) { return d.x; })
-            .attr('y', 450)
+            .attr('x', function (d) { return _getSettings(d.ref).x; })
+            .attr('y', function (d) { return _getSettings(d.ref).y; })
             .attr('fill', 'black');
         
         stockDisplays.select("rect")
             .attr('height', function (d) { return d.value; })
-            .attr('y', function (d) { return 430 - d.value; });
+            .attr('y', function (d) { return (_getSettings(d.ref).y - 20) - d.value; });
         
         stockDisplays.select("text")
             .text(function (d) { return d.name + ' (' + Math.round(d.value * 100) / 100 + ')'; });
@@ -63,39 +95,39 @@ var DataView = function(parent,controlId, width, height)
         
         var totaltext = flowSelection.append('text')
             .attr('id', 'flowtotaldisplay')
-            .attr('x', function (d) { return d.x; })
-            .attr('y', 480)
+            .attr('x', function (d) { return _getSettings(d.ref).x; })
+            .attr('y', function (d) { return _getSettings(d.ref).y + 30; })
             .attr('fill', 'black');
             
         totaltext.append('tspan')
             .attr('id', 'flowtotal')
-            .attr('x', function (d) { return d.x; })
+            .attr('x', function (d) { return _getSettings(d.ref).x; })
             .attr('dy', '1.2em');
             
         var flowtext = flowSelection.append('text')
             .attr('id', 'flowdisplay')
-            .attr('x', function (d) { return d.x; })
-            .attr('y', 510)
+            .attr('x', function (d) { return _getSettings(d.ref).x;  })
+            .attr('y', function (d) { return _getSettings(d.ref).y + 60; })
             .attr('fill', 'black');
         
         flowtext.append('tspan')
             .attr('id', 'inflow')
-            .attr('x', function (d) { return d.x; })
+            .attr('x', function (d) { return _getSettings(d.ref).x;  })
             .attr('dy', '1.2em');
             
         flowtext.append('tspan')
             .attr('id', 'outflow')
-            .attr('x', function (d) { return d.x; })
+            .attr('x', function (d) { return _getSettings(d.ref).x;  })
             .attr('dy', '1.2em');
         
         flowDisplays.select('#flowtotal')
-            .text(function (d) { return Math.round(d.totalflow.flow * 100) / 100; })
+            .text(function (d) { return Math.round(d.totalflow.value * 100) / 100; })
         
         flowDisplays.select('#inflow')
-            .text(function (d) { return d.inflow.name + ' (' + Math.round(d.inflow.flow * 100) / 100 + ')'; })
+            .text(function (d) { return d.inflow.name + ' (' + Math.round(d.inflow.value * 100) / 100 + ')'; })
             
         flowDisplays.select('#outflow')
-            .text(function (d) { return d.outflow.name + ' (' + Math.round(d.outflow.flow * 100) / 100 + ')'; })
+            .text(function (d) { return d.outflow.name + ' (' + Math.round(d.outflow.value * 100) / 100 + ')'; })
             
 
 
@@ -117,7 +149,6 @@ var TimeDisplay = function(parent,controlId)
 var TimeLine = function(parent,controlId)
 {
     var _min = 0;
-    var _max = 0;
     
     var _timeChangedListeners = new Array();
     
@@ -152,19 +183,18 @@ var TimeLine = function(parent,controlId)
         _timeChangedListeners.push(timeChangedListener);
     };
     
-    this.initialise = function(min, max)
+    this.initialise = function(max)
     {
-        _min = min;
         _max = max;
         
         var rangeMin = 0;
         var rangeMax = parseInt(_sliderInput.property('clientWidth'));
         
-        var x = d3.scale.linear().domain([min, max]).range([rangeMin, rangeMax]);
+        var x = d3.scale.linear().domain([_min, _max]).range([rangeMin, rangeMax]);
         
-        _sliderInput.attr('min', min.toString())
-            .attr('max', max.toString())
-            .attr('value', min.toString());
+        _sliderInput.attr('min', _min.toString())
+            .attr('max', _max.toString())
+            .attr('value', _min.toString());
             
         var axis = d3.svg.axis()
             .scale(x);

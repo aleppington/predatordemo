@@ -2,9 +2,9 @@ function createModel() {
 	
     var prey =
     {
+	ref: 'Prey',
         name: 'Prey',
         size: 164,
-        x: 400,
         inflow:
 	{
 		name: 'Births',
@@ -20,9 +20,9 @@ function createModel() {
 
     var predator =
     {
+	ref: 'Predator',
         name: 'Predator',
         size: 112,
-        x: 200,
         inflow:
 	{
 		name: 'Births',
@@ -44,7 +44,7 @@ function createModel() {
     }
 
     return {
-        stocks: [predator, prey],
+        stocks: [prey, predator],
         controls: [preyOutflowControl, predatorInflowControl]
     };
 }
