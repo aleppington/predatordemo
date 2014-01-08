@@ -5,7 +5,8 @@ body
 
 circle.range
 {
-	fill: #f9f9f9;
+	fill: #ffffff;
+	fill-opacity: 50%;
 	stroke: #eeeeee;
 	stroke-width : 1;
 }
@@ -13,10 +14,11 @@ circle.range
 circle.value
 {
 	fill: #0000ff;
-	fill-opacity: 20%;
+	fill-opacity: 50%;
 	stroke: #eeeeee;
 	stroke-width : 1;
 }
+
 
 input
 {

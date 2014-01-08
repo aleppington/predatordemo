@@ -8,7 +8,9 @@ function createSettings() {
         name: 'Prey',
         x: 200,
         y: 175,
-        width: 250
+        width: 250,
+	icon: 'Rabbit.svg',
+	iconwidth: 175
     };
 
     var _predator =
@@ -17,7 +19,9 @@ function createSettings() {
         name: 'Predator',
         x: 450,
         y: 325,
-        width: 250
+        width: 250,
+	icon: 'Rabbit.svg',
+	iconwidth: 175
     };
     
     return {
