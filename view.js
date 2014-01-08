@@ -19,7 +19,7 @@ var View = function(parentElementId, settings)
         };
     };
     
-    var _dataView = new BarChartDataView(parent, 'dataview', getStockSetting(settings));  
+    var _dataView = new CircleDataView(parent, 'dataview', getStockSetting(settings));  
     var _timeLine = new TimeLine(parent, 'timeline');
     var _timeDisplay = new TimeDisplay(parent, 'timedisplay');
     
@@ -40,24 +40,57 @@ var View = function(parentElementId, settings)
     _timeLine.addTimeChangedListener(_timeDisplay.timeChange);
 };
 
-var CircleDataView = function(parent,controlId, width, height, max)
+var CircleDataView = function(parent,controlId, settings)
 {
+    var _getSettings = settings;
+    
     var _view = parent.append('svg:svg')
         .attr('id', controlId)
-        .attr('width', width)
-        .attr('height', height);
         
     var _stocksView = _view.append('g');
+    
+    var getRadius = function(value, maxValue, stockRef){
+        
+        var scale = d3.scale.sqrt();
+        scale.domain([0,maxValue]).range([0,(_getSettings(stockRef).width/2)]);
+        return scale(value);
+    }
+    
+    this.update = function(data)
+    {
+        var stockDisplays = _stocksView.selectAll("g")
+            .data(data.stocks);
+            
+        var stockSelection = stockDisplays.enter().append('svg:g');
+        
+        stockSelection.append("circle")
+            .attr('class', 'range')
+            .attr('cx', function (d) { return _getSettings(d.ref).x; })
+            .attr('cy', function (d) { return _getSettings(d.ref).y; })
+        
+        stockSelection.append('text')
+            .attr('x', function (d) { return _getSettings(d.ref).x - _getSettings(d.ref).width/2; })
+            .attr('y', function (d) { return _getSettings(d.ref).y + _getSettings(d.ref).width/2 + 25; })
+            .attr('fill', 'black');
+            
+        stockSelection.append("circle")
+            .attr('class', 'value')
+            .attr('cx', function (d) { return _getSettings(d.ref).x; })
+            .attr('cy', function (d) { return _getSettings(d.ref).y; })
+
+        stockDisplays.select("circle.range")
+            .attr('r', function (d) { return (_getSettings(d.ref).width/2); });
+            
+        stockDisplays.select("text")
+            .text(function (d) { return d.name + ' (' + Math.round(d.value * 100) / 100 + ')'; });
+            
+        stockDisplays.select("circle.value")
+            .attr('r', function(d) { return getRadius(d.value, d.maxValue(), d.ref); });
+    };
 }
 
 var BarChartDataView = function(parent,controlId, settings)
 {
-    //var _getSettings = function(s) {
-    //    return function (d){
-    //        return s(d.ref);
-    //    };
-    //}(settings);
-    
     var _getSettings = settings;
     
     var _view = parent.append('svg:svg')

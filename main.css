@@ -3,9 +3,19 @@ body
 	font-family: arial;
 }
 
-circle
+circle.range
 {
-	background-color: white;
+	fill: #f9f9f9;
+	stroke: #eeeeee;
+	stroke-width : 1;
+}
+
+circle.value
+{
+	fill: #0000ff;
+	fill-opacity: 20%;
+	stroke: #eeeeee;
+	stroke-width : 1;
 }
 
 input

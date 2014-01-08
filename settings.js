@@ -6,20 +6,18 @@ function createSettings() {
     {
 	ref: 'Prey',
         name: 'Prey',
-        x: 400,
-        y: 450,
-        width: 150,
-        max: 0
+        x: 200,
+        y: 175,
+        width: 250
     };
 
     var _predator =
     {
 	ref: 'Predator',
         name: 'Predator',
-        x: 200,
-        y: 450,
-        width: 150,
-        max: 0
+        x: 450,
+        y: 325,
+        width: 250
     };
     
     return {

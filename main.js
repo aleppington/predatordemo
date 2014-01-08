@@ -11,7 +11,7 @@ var Presenter = function(view, model, settings)
     };
     
     var update = function(time) {
-        _view.update(_data[time]);
+        _view.update(_data.timeSlotData[time]);
     };
     
     //var setMaxRanges(data, settings)
@@ -20,22 +20,35 @@ var Presenter = function(view, model, settings)
     //};
     
     var runModel = function(timeLength, calculator){
-        var data = [];
+        
+        var data =
+        {
+            summaryData :
+            {
+                maxValue: 0
+            },
+            timeSlotData : []
+        };
+ 
         for (var j=0; j< timeLength; j++)
         {
             var model = calculator();
-            var timeSlotData = {
+            
+            var timeSlotItemData = {
                 time: j,
                 stocks : []
             };
+            
             for (var i = 0; i < model.stocks.length; i++)
             {
                 var currentStock = model.stocks[i];
-                timeSlotData.stocks.push(
+                timeSlotItemData.stocks.push(
                     {
                         ref: currentStock.ref,
                         name: currentStock.name,
                         value: currentStock.size,
+                        maxValue : function (){ return data.summaryData.maxValue;},
+                        
                         inflow:
                         {
                             name: currentStock.inflow.name,
@@ -52,11 +65,28 @@ var Presenter = function(view, model, settings)
                             value: calculateTotalFlow(currentStock)
                         }
                     });
+                setMaxValue(data.summaryData,currentStock.ref,currentStock.size);
             }
-            data.push(timeSlotData);
+            data.timeSlotData.push(timeSlotItemData);
         }
         return data;
+        
     };
+    
+    var setMaxValue = function(summaryData, stockRef, value){
+        //var stockSummaryData = summaryData[stockRef]
+        //if (stockSummaryData == null)
+        //{
+        //    summaryData[stockRef] = value;
+        //}
+        //else
+        //{
+        //    summaryData[stockRef] = Math.max(stockSummaryData, value);
+        //}
+        summaryData.maxValue = Math.max(summaryData.maxValue, value);
+    }
+    
+
     
     var step = function step(model) {
         for (var i = model.controls.length - 1; i >= 0; i--) {
