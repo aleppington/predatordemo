@@ -49,13 +49,19 @@ var CircleDataView = function(parent,controlId, settings)
         
     var _stocksView = _view.append('g');
     
-    var getRadius = function(value, maxValue, stockRef)
+    var getValue = function(value, maxValue, maxRange)
     {
         var scale = d3.scale.sqrt();
-        scale.domain([0,maxValue]).range([0,(_getSettings(stockRef).width/2)]);
+        scale.domain([0,maxValue]).range([0,maxRange]);
         var returnValue = scale(value);
         return returnValue;
-    }; 
+    };
+    
+    var getImageX = function(d)
+    {
+       return (_getSettings(d.ref).x - (getValue(d.value, d.maxValue(), _getSettings(d.ref).iconwidth)/2));
+    }
+    
     
     this.update = function(data)
     {
@@ -74,8 +80,9 @@ var CircleDataView = function(parent,controlId, settings)
         var image = stockSelection.append("image");
         image.attr('class', 'valueicon')
         image.attr('xlink:href', function (d) { return _getSettings(d.ref).icon; })
-        image.attr('x', function (d) { return (_getSettings(d.ref).y - (getRadius(d.value, d.maxValue(), d.ref))); });
-        image.attr('y', function (d) { return (_getSettings(d.ref).y - (getRadius(d.value, d.maxValue(), d.ref))); });
+        //image.attr('x', function (d) { return (_getSettings(d.ref).x - (getValue(d.value, d.maxValue(),_getSettings(d.ref).iconwidth))/2) ; })
+        //image.attr('y', function (d) { return (_getSettings(d.ref).y - (getValue(d.value, d.maxValue(),_getSettings(d.ref).iconwidth))/2) ; })
+        //image.attr('y', function (d) { return (_getSettings(d.ref).y - (getValue((_getSettings(d.ref).iconwidth)/2, d.value, d.maxValue(), _getSettings(d.ref).iconwidth))); });
               
         stockSelection.append("circle")
             .attr('class', 'range')
@@ -96,14 +103,16 @@ var CircleDataView = function(parent,controlId, settings)
             .attr('r', function (d) { return (_getSettings(d.ref).width/2); });
             
         stockDisplays.select("image.valueicon")
-            .attr('width', function (d) { return (getRadius(d.value, d.maxValue(), d.ref)*2); })
-            .attr('height', function (d) { return (getRadius(d.value, d.maxValue(), d.ref)*2); })
+            .attr('width', function (d) { return (getValue(d.value, d.maxValue(), _getSettings(d.ref).iconwidth)); })
+            .attr('height', function (d) { return (getValue(d.value, d.maxValue(), _getSettings(d.ref).iconwidth)); })
+            .attr('x', function (d) { return  _getSettings(d.ref).x - (getValue(d.value, d.maxValue(), _getSettings(d.ref).iconwidth))/2;})
+            .attr('y', function (d) { return  _getSettings(d.ref).y - (getValue(d.value, d.maxValue(), _getSettings(d.ref).iconwidth))/2;});
             
         stockDisplays.select("text")
             .text(function (d) { return d.name + ' (' + Math.round(d.value * 100) / 100 + ')'; });
             
         stockDisplays.select("circle.value")
-            .attr('r', function(d) { return getRadius(d.value, d.maxValue(), d.ref); });
+            .attr('r', function(d) { return getValue(d.value, d.maxValue(), (_getSettings(d.ref).width)/2); });
     };
 }
 

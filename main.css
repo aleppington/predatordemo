@@ -14,9 +14,9 @@ circle.range
 circle.value
 {
 	fill: #0000ff;
-	fill-opacity: 50%;
-	stroke: #eeeeee;
-	stroke-width : 1;
+	fill-opacity: 2%;
+	stroke: #0000ff;
+	stroke-width : 0.3;
 }
 
 

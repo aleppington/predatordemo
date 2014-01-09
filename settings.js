@@ -20,7 +20,7 @@ function createSettings() {
         x: 450,
         y: 325,
         width: 250,
-	icon: 'Rabbit.svg',
+	icon: 'Wolf.svg',
 	iconwidth: 175
     };
     
