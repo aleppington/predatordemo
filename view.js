@@ -77,13 +77,10 @@ var CircleDataView = function(parent,controlId, settings)
         //    .attr('height', 40)
         //    .attr('width',  40);
             
-        var image = stockSelection.append("image");
-        image.attr('class', 'valueicon')
-        image.attr('xlink:href', function (d) { return _getSettings(d.ref).icon; })
-        //image.attr('x', function (d) { return (_getSettings(d.ref).x - (getValue(d.value, d.maxValue(),_getSettings(d.ref).iconwidth))/2) ; })
-        //image.attr('y', function (d) { return (_getSettings(d.ref).y - (getValue(d.value, d.maxValue(),_getSettings(d.ref).iconwidth))/2) ; })
-        //image.attr('y', function (d) { return (_getSettings(d.ref).y - (getValue((_getSettings(d.ref).iconwidth)/2, d.value, d.maxValue(), _getSettings(d.ref).iconwidth))); });
-              
+        stockSelection.append("image")
+            .attr('class', 'valueicon')
+            .attr('xlink:href', function (d) { return _getSettings(d.ref).icon; })
+       
         stockSelection.append("circle")
             .attr('class', 'range')
             .attr('cx', function (d) { return _getSettings(d.ref).x; })
@@ -93,6 +90,8 @@ var CircleDataView = function(parent,controlId, settings)
             .attr('class', 'value')
             .attr('cx', function (d) { return _getSettings(d.ref).x; })
             .attr('cy', function (d) { return _getSettings(d.ref).y; })
+            .attr('fill', function (d) { return _getSettings(d.ref).fill; })
+            .attr('stroke', function (d) { return _getSettings(d.ref).stroke; })
             
         stockSelection.append('text')
             .attr('x', function (d) { return _getSettings(d.ref).x - _getSettings(d.ref).width/2 + 50; })

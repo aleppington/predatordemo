@@ -10,7 +10,9 @@ function createSettings() {
         y: 175,
         width: 250,
 	icon: 'Rabbit.svg',
-	iconwidth: 175
+	iconwidth: 175,
+	fill: '#00ff00',
+	stroke: '#00ff00'
     };
 
     var _predator =
@@ -21,7 +23,9 @@ function createSettings() {
         y: 325,
         width: 250,
 	icon: 'Wolf.svg',
-	iconwidth: 175
+	iconwidth: 175,
+	fill: '#ff0000',
+	stroke: '#ff0000'
     };
     
     return {

@@ -13,32 +13,44 @@ circle.range
 
 circle.value
 {
-	fill: #0000ff;
-	fill-opacity: 2%;
-	stroke: #0000ff;
-	stroke-width : 0.3;
+	fill-opacity: 3%;
+	stroke-width : 0.5;
 }
 
 
-input
-{
-	display: block;
+input[type='range'] {
+    -webkit-appearance: none !important;
+    background: #ccccff;
+    border: solid 1px #eeeeee;
+    height:7px;
+}
+input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    background: #eeeeff;
+    height:15px;
+    width:15px;
+    border: solid 1px #cccccc;
 }
 
 #dataview
 {
-	background-color: #f6f6f6;
+	background-color: #f9f9f9;
 	display: block;
 	width: 600px;
 	height: 600px;
+	border: solid 2px #dddddd;
 }
+
 
 #timeline
 {
-	background-color: #eeeeee;
+	/* Safari 5.1+, Chrome 10+ */
+	background: -webkit-radial-gradient(circle, #fafaff, #f0f0ff);
+	/* background-color: #eeeeee; */
 	width: 550px;
 	height: 60px;
 	padding: 25px;
+	border: solid 2px #dddddd;
 }
 
 #timeline_timeline
@@ -73,7 +85,7 @@ input
 	width: 60px;
 	height: 60px;
 	padding: 10px;
-	border: solid 1px red;
+	border: dashed 1px #000000;
 	
 }
 
