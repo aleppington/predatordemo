@@ -29,7 +29,15 @@ input[type='range']::-webkit-slider-thumb {
     background: #eeeeff;
     height:15px;
     width:15px;
+    cursor: pointer;
     border: solid 1px #cccccc;
+}
+
+text.stocktext
+{
+	fill: black;
+	font-size: 0.9em;
+	font-weight: bold;
 }
 
 #dataview
@@ -92,12 +100,12 @@ input[type='range']::-webkit-slider-thumb {
 
 #flowtotaldisplay
 {
-	font-size: 1.1em;
+	font-size: 0.8em;
 }
 
 #flowdisplay
 {
-	font-size: 0.9em;
+	font-size: 0.8em;
 }
 
 

@@ -48,6 +48,7 @@ var CircleDataView = function(parent,controlId, settings)
         .attr('id', controlId)
         
     var _stocksView = _view.append('g');
+    var _flowsView = _view.append("g");
     
     var getValue = function(value, maxValue, maxRange)
     {
@@ -94,9 +95,9 @@ var CircleDataView = function(parent,controlId, settings)
             .attr('stroke', function (d) { return _getSettings(d.ref).stroke; })
             
         stockSelection.append('text')
+            .attr('class','stocktext')
             .attr('x', function (d) { return _getSettings(d.ref).x - _getSettings(d.ref).width/2 + 50; })
             .attr('y', function (d) { return _getSettings(d.ref).y + _getSettings(d.ref).width/2 + 30; })
-            .attr('fill', 'black');
             
         stockDisplays.select("circle.range")
             .attr('r', function (d) { return (_getSettings(d.ref).width/2); });
@@ -108,10 +109,54 @@ var CircleDataView = function(parent,controlId, settings)
             .attr('y', function (d) { return  _getSettings(d.ref).y - (getValue(d.value, d.maxValue(), _getSettings(d.ref).iconwidth))/2;});
             
         stockDisplays.select("text")
-            .text(function (d) { return d.name + ' (' + Math.round(d.value * 100) / 100 + ')'; });
+            .text(function (d) { return d.name + ' = ' + Math.round(d.value * 100) / 100 ; });
             
         stockDisplays.select("circle.value")
             .attr('r', function(d) { return getValue(d.value, d.maxValue(), (_getSettings(d.ref).width)/2); });
+            
+        var flowDisplays = _flowsView.selectAll("g")
+            .data(data.stocks);
+        
+        var flowSelection = flowDisplays.enter().append('svg:g');
+        
+        
+        var flowtext = flowSelection.append('text')
+            .attr('id', 'flowdisplay')
+            .attr('x', function (d) { return _getSettings(d.ref).x - _getSettings(d.ref).width/2 + 50; })
+            .attr('y', function (d) { return _getSettings(d.ref).y + _getSettings(d.ref).width/2 + 40; })
+            .attr('fill', 'black');
+        
+        flowtext.append('tspan')
+            .attr('id', 'inflow')
+            .attr('x', function (d) { return _getSettings(d.ref).x - _getSettings(d.ref).width/2 + 50;  })
+            .attr('dy', '1.2em');
+            
+        flowtext.append('tspan')
+            .attr('id', 'outflow')
+            .attr('x', function (d) { return _getSettings(d.ref).x - _getSettings(d.ref).width/2 + 50;  })
+            .attr('dy', '1.2em');
+            
+        var totaltext = flowSelection.append('text')
+            .attr('id', 'flowtotaldisplay')
+            .attr('x', function (d) { return _getSettings(d.ref).x - _getSettings(d.ref).width/2 + 50;  })
+            .attr('y', function (d) { return _getSettings(d.ref).y + _getSettings(d.ref).width/2 + 80; })
+            .attr('fill', 'black');
+            
+        totaltext.append('tspan')
+            .attr('id', 'flowtotal')
+            .attr('x', function (d) { return _getSettings(d.ref).x - _getSettings(d.ref).width/2 + 50;  })
+            .attr('dy', '1.2em');
+            
+        
+        flowDisplays.select('#flowtotal')
+            .text(function (d) { return 'Total flow = ' + Math.round(d.totalflow.value * 100) / 100; })
+        
+        flowDisplays.select('#inflow')
+            .text(function (d) { return d.inflow.name + ' (' + Math.round(d.inflow.value * 100) / 100 + ')'; })
+            
+        flowDisplays.select('#outflow')
+            .text(function (d) { return d.outflow.name + ' (' + Math.round(d.outflow.value * 100) / 100 + ')'; })
+            
     };
 }
 
